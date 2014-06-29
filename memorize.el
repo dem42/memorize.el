@@ -1,4 +1,14 @@
-;; use Edebug to get interactive lisp debugging (C-u C-M-x)
+;;; memorize.el
+;; --- interactive mode for memorize foreign language vocabulary
+
+;; Copyleft (C) Martin P
+
+;; Emacs Lisp Archive Entry
+;; Filename:      memorize.el
+;; Version:       0.1
+;; Keywords:      memorization languages
+;; Author:        Martin P
+;; Description:   memorizing foreign language vocabulary in emacs
 
 ;; ideally we would like it to ask us which vocabulary we want to memorize when we 
 ;; enter the mode
@@ -6,7 +16,9 @@
 (defvar memorize/vocabulary-type "spanish")
 ;; equality test is not default, default is eql which seems to be object id test 
 (defvar memorize/vocabulary-map (make-hash-table :test 'equal))
-  
+ 
+;; Parses the user chosen file to build the vocabulary map 
+;; use Edebug to get interactive lisp debugging (C-u C-M-x)
 (defun memorize/reload-vocabulary-map ()
   "clears and updates the vocabulary map based on the value of \(memorize/vocabulary-type)"
   (interactive)
@@ -21,7 +33,10 @@
 	  (next-line)
 	  (beginning-of-line))))))
 
-;; we would also like to keep a count of correct words somewhere -- second iteration maybe
+;; Main checker method. Checks entered word against user loaded dictionary 
+;; and updates the buffer local hash table
+;; TODO: would be awesome to get fuzzy matching so that it finds the
+;; closest words and highlights the errors?
 (defun memorize/check-word-and-newline ()
   "checks whether the last word is in the dictionary and inserts newline or OK"
   (interactive)
@@ -38,6 +53,8 @@
 	(memorize/add-to-local-dictionary word-to-check)
 	(newline)))))
 
+;; This interactive method clears the local hash table
+;; this lets the user start a new memorize session
 (defun memorize/clear-buffer ()
   "Clear the buffer in preparation for a new memorize session"
   (interactive)
@@ -45,16 +62,14 @@
   (clrhash memorize/buffer-local-map))
 
 (defun memorize/initalize-local-var ()
-  "just a test"
+  "Intialize the buffer local hash table which contains correct guesses"
   (make-local-variable 'memorize/buffer-local-map)
   (setq memorize/buffer-local-map (make-hash-table :test 'equal)))
 
 (defun memorize/add-to-local-dictionary (word)
-  "adds words to local dictionary"
+  "Adds words to local dictionary"
   (puthash word t memorize/buffer-local-map))
 
-;; todo .. would be awesome to get fuzzy matching so that it finds the
-;; closest words and highlights the errors?
 
 ;;;(regexp-opt '("OK" "WRONG")) <- to generate an optimal regexp
 (defvar memorize-font-lock-keywords
@@ -67,22 +82,6 @@
     (define-key map (kbd "C-c C-k") 'memorize/clear-buffer)
     map)
   "Keymap for memorize mode")
-
-;; minor mode definition
-;; (define-minor-mode memorize-mode
-;;   "Minor mode for memorizing vocabulary"
-;;   :lighter " memorize"
-;;   :keymap memorize-mode-map
-;;   (memorize/initalize-local-var)
-;;   (if (eq memorize-mode nil)
-;;       (setq header-line-format nil)
-;;     (setq header-line-format 
-;; 	  (list " Vocab guessed: " 
-;; 		'(:eval (number-to-string (hash-table-count memorize/buffer-local-map))) 
-;; 		"/" 
-;; 		'(:eval (number-to-string (hash-table-count memorize/vocabulary-map))))
-;; 	  )))
-
 
 ;; major mode definition
 (define-derived-mode memorize-mode text-mode "Memorize"
