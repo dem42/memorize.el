@@ -10,6 +10,10 @@
 ;; Author:        Martin P
 ;; Description:   memorizing foreign language vocabulary in emacs
 
+
+(add-to-list 'load-path ".")
+(require 'vocab-downloader)
+
 ;; ideally we would like it to ask us which vocabulary we want to memorize when we 
 ;; enter the mode
 (defvar memorize/vocabulary-folder (concat library-dir "/.emacs.d/memorize/vocabulary/"))
@@ -19,6 +23,8 @@
  
 ;; Parses the user chosen file to build the vocabulary map 
 ;; use Edebug to get interactive lisp debugging (C-u C-M-x)
+;; the vocab files have the format:
+;;foreign word=translation
 (defun memorize/reload-vocabulary-map ()
   "clears and updates the vocabulary map based on the value of \(memorize/vocabulary-type)"
   (interactive)
@@ -28,8 +34,12 @@
       (insert-file-contents file)
       (while (not (eobp))
 	(let ((cp (point)))
-	  (forward-word)
-	  (puthash (buffer-substring cp (point)) t memorize/vocabulary-map)
+	  (end-of-line)
+	  (let* ((line (buffer-substring cp (point))) 
+		 (chunks (split-string line "="))
+		 (vocab (car chunks))
+		 (translation (car (cdr chunks))))
+	    (puthash vocab translation  memorize/vocabulary-map))
 	  (next-line)
 	  (beginning-of-line))))))
 
@@ -101,4 +111,4 @@
 ;;; autoload
 (add-to-list 'auto-mode-alist '("\\.memorize\\'" . memorize-mode))
 
-(provide 'memorize-mode)
+(provide 'memorize)
