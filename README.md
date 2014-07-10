@@ -5,8 +5,7 @@ Major mode for emacs to memorize vocabulary
 
 This mode lets you check if you remember your vocabulary. 
 
-TODO
-----
+*TODO*
  1. switch between vocab files
  2. download vocab files from memorize.com
 
@@ -15,7 +14,7 @@ How to use
 ----------
 Put the following into your init file (i.e. `.emacs`)
 
-    (add-to-list 'load-path "<path_to_memorize_directory/memorize")
+    (add-to-list 'load-path "<path_to_memorize_directory>/memorize")
     (require 'memorize-mode)
 
 
