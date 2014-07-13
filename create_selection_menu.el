@@ -12,23 +12,6 @@
   (add-text-properties 0 (length str) '(mouse-face underline) str)
   str)
 
-
-;; lambdas
-;; (setq z 
-;;       (let ((a 3))
-;; 	`(lambda () (+ ,a 2))))
-
-;; (funcall z)
-
-;; (defun foo (n)
-;;   (lexical-let ((n n)) #'(lambda() n)))
-
-;; (funcall (foo 10))
-
-;; (foo 10)
-;; ((lambda () 3))
-
-
 ;; a function to construct the menu and insert it into the current buffer
 (defun insert-menu-items (list)
   (let ((i 0)) 
