@@ -80,6 +80,14 @@
   "Adds words to local dictionary"
   (puthash word t memorize/buffer-local-map))
 
+;; A vocabulary session is tied closely to a vocab file
+;; this function will display options based on which vocab files are available
+;; (defun memorize/choose-vocabulary-session ()
+;;   "Allows the user the pick the vocabulary session"
+;;   (interactive)
+;;   (dolist (file (directory-files memorize/vocabulary-folder))
+;;     (insert file)
+;;     (newline)))
 
 ;;;(regexp-opt '("OK" "WRONG")) <- to generate an optimal regexp
 (defvar memorize-font-lock-keywords
@@ -105,6 +113,7 @@
 	      '(:eval (number-to-string (hash-table-count memorize/vocabulary-map))))
 	))
 
+;(add-hook 'memorize-mode-hook (lambda () (memorize/choose-vocabulary-session)))
 (add-hook 'memorize-mode-hook (lambda () (memorize/reload-vocabulary-map)))
 (add-hook 'memorize-mode-hook (lambda () (memorize/clear-buffer)))
 
