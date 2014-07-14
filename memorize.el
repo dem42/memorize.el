@@ -1,7 +1,7 @@
 ;;; memorize.el
 ;; --- interactive mode for memorize foreign language vocabulary
 
-;; Copyleft (C) Martin P
+;; Copyright MIT License 
 
 ;; Emacs Lisp Archive Entry
 ;; Filename:      memorize.el
@@ -13,6 +13,7 @@
 
 (add-to-list 'load-path ".")
 (require 'vocab-downloader)
+(require 'create-selection-menu)
 
 ;; ideally we would like it to ask us which vocabulary we want to memorize when we 
 ;; enter the mode
