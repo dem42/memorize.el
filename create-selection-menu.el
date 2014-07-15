@@ -14,8 +14,7 @@
     (define-key map [mouse-2] (lambda () (interactive) (message s) (funcall callback s)))
     (define-key map [mouse-1] (lambda () (interactive) (message s) (funcall callback s)))
     (define-key map (kbd "RET") (lambda () (interactive) (message s) (funcall callback s)))
-    (put-text-property 0 (length s) 'keymap map s)
-    (insert s))
+    (put-text-property 0 (length s) 'keymap map s))
   str)
 
 

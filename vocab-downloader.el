@@ -9,10 +9,11 @@
 	  (let ((match (match-string 1)))
 	    (message match)
 	    (setq found-something (cons match found-something))
-	    (with-temp-buffer
-	      (browse-url-emacs (concat "https://raw.githubusercontent.com/dem42/memorize.el/master/vocabulary/" match))
-	      (write-file (concat memorize/vocabulary-folder "/" match))
-	      (kill-buffer))))
+	    (save-excursion
+	      (with-temp-buffer
+		(browse-url-emacs (concat "https://raw.githubusercontent.com/dem42/memorize.el/master/vocabulary/" match))
+		(write-file (concat memorize/vocabulary-folder "/" match))
+		(kill-buffer)))))
 	(kill-buffer)))
     found-something))
 
