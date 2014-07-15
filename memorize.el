@@ -89,11 +89,15 @@
    The menu is interactive so the user can start a session in the selected vocab
    by clicking enter or double-clicking on the selected vocab file."
   (erase-buffer)
+  (insert "This is the vocabulary selection screen. Click on the vocabulary file that you would like to practice.\n")
   (insert-menu-items (scan-github-vocab) 
 		     (lambda (str) 
 		       (setq memorize/vocabulary-type str)
 		       (memorize/reload-vocabulary-map)
-		       (memorize/clear-buffer))))
+		       (memorize/clear-buffer)
+		       (insert "Type words and phrases from the selected vocabulary into the buffer.\n")
+		       (insert "After you have finished typing, press enter and your input will be check against the stored vocabulary.\n\n")
+		       )))
 
 ;; A vocabulary session is tied closely to a vocab file
 ;; this function will display options based on which vocab files are available

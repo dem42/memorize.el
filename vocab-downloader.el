@@ -17,9 +17,6 @@
 	(kill-buffer)))
     found-something))
 
-
-(scan-github-vocab)
-
 (provide 'vocab-downloader)
 
 
