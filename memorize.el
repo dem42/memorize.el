@@ -18,7 +18,7 @@
 ;; ideally we would like it to ask us which vocabulary we want to memorize when we 
 ;; enter the mode
 (defvar memorize/vocabulary-folder (concat library-dir "/.emacs.d/memorize/vocabulary/"))
-(defvar memorize/vocabulary-type "spanish")
+(defvar memorize/vocabulary-type "spanish.vocab")
 ;; equality test is not default, default is eql which seems to be object id test 
 (defvar memorize/vocabulary-map (make-hash-table :test 'equal))
  
@@ -30,7 +30,7 @@
   "clears and updates the vocabulary map based on the value of \(memorize/vocabulary-type)"
   (interactive)
   (clrhash memorize/vocabulary-map)
-  (let ((file (concat memorize/vocabulary-folder memorize/vocabulary-type ".vocab")))
+  (let ((file (concat memorize/vocabulary-folder memorize/vocabulary-type)))
     (with-temp-buffer
       (insert-file-contents file)
       (while (not (eobp))
@@ -81,6 +81,20 @@
   "Adds words to local dictionary"
   (puthash word t memorize/buffer-local-map))
 
+
+(setq memorize/vocabulary-type "spanish.vocab")
+
+(defun memorize/vocab-selection ()
+  "Downloads vocab and shows the user a menu of avaiable vocab sessions.
+   The menu is interactive so the user can start a session in the selected vocab
+   by clicking enter or double-clicking on the selected vocab file."
+  (erase-buffer)
+  (insert-menu-items (scan-github-vocab) 
+		     (lambda (str) 
+		       (setq memorize/vocabulary-type str)
+		       (memorize/reload-vocabulary-map)
+		       (memorize/clear-buffer))))
+
 ;; A vocabulary session is tied closely to a vocab file
 ;; this function will display options based on which vocab files are available
 ;; (defun memorize/choose-vocabulary-session ()
@@ -115,8 +129,8 @@
 	))
 
 ;(add-hook 'memorize-mode-hook (lambda () (memorize/choose-vocabulary-session)))
-(add-hook 'memorize-mode-hook (lambda () (memorize/reload-vocabulary-map)))
-(add-hook 'memorize-mode-hook (lambda () (memorize/clear-buffer)))
+;;(add-hook 'memorize-mode-hook (lambda () (memorize/clear-buffer)))
+(add-hook 'memorize-mode-hook (lambda () (memorize/vocab-selection)))
 
 ;;; autoload
 (add-to-list 'auto-mode-alist '("\\.memorize\\'" . memorize-mode))

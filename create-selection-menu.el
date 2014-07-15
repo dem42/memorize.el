@@ -11,9 +11,9 @@
   ;;(put-text-property 0 (length str) 'face '(:background "DarkViolet" :foreground "white") str)
   (add-text-properties 0 (length str) '(mouse-face underline) str)
   (lexical-let ((s str) (map (make-sparse-keymap)) (callback enhance-callback))
-    (define-key map [mouse-2] (lambda () (interactive) (message s) (funcall callback s)))
-    (define-key map [mouse-1] (lambda () (interactive) (message s) (funcall callback s)))
-    (define-key map (kbd "RET") (lambda () (interactive) (message s) (funcall callback s)))
+    (define-key map [mouse-2] (lambda () (interactive) (funcall callback s)))
+    (define-key map [mouse-1] (lambda () (interactive) (funcall callback s)))
+    (define-key map (kbd "RET") (lambda () (interactive) (funcall callback s)))
     (put-text-property 0 (length s) 'keymap map s))
   str)
 
@@ -26,20 +26,6 @@
     (dolist (elem list)
       (newline)
       (setq i (1+ i))
-      (insert-string (enhance-string (concat (number-to-string i) ". " elem) enhance-callback)))))
+      (insert-string (concat (number-to-string i) ". " (enhance-string elem enhance-callback))))))
 
 (provide 'create-selection-menu)
-
-
-
-(defun operate-this-button (str)
-  (interactive "s")
-  (message "hello world %s" str))
-
-
-
-
-
-hello
-
-hello
